@@ -22,30 +22,30 @@ void testeHeap()
 	n = 5;
 
 	Heap* heap = criarHeap(n);
-	inserirNoHeap(heap, 10, 5);
-	inserirNoHeap(heap, 2, 6);
-	inserirNoHeap(heap, 1, 1);
-	inserirNoHeap(heap, 10, 6);
-	inserirNoHeap(heap, -1, 48);
+	inserirNoHeap(heap, 10, 5, 0, 0);
+	inserirNoHeap(heap, 2, 6, 0, 0);
+	inserirNoHeap(heap, 1, 1, 0, 0);
+	inserirNoHeap(heap, 10, 6, 0, 0);
+	inserirNoHeap(heap, -1, 48, 0, 0);
 
 	Heap* heap2 = criarHeap(7);
-	inserirNoHeap(heap2, 23, 0);
-	inserirNoHeap(heap2, 21, 0);
-	inserirNoHeap(heap2, 9, 0);
-	inserirNoHeap(heap2, 13, 0);
-	inserirNoHeap(heap2, 15, 0);
-	inserirNoHeap(heap2, 8, 0);
-	inserirNoHeap(heap2, 2, 0);
+	inserirNoHeap(heap2, 23, 0, 0, 0);
+	inserirNoHeap(heap2, 21, 0, 0, 0);
+	inserirNoHeap(heap2, 9, 0, 0, 0);
+	inserirNoHeap(heap2, 13, 0, 0, 0);
+	inserirNoHeap(heap2, 15, 0, 0, 0);
+	inserirNoHeap(heap2, 8, 0, 0, 0);
+	inserirNoHeap(heap2, 2, 0, 0, 0);
 
 	Heap* heap3 = criarHeap(3);
-	inserirNoHeap(heap3, 5, 10);
-	inserirNoHeap(heap3, 10, 3);
-	inserirNoHeap(heap3, 5, -1);
+	inserirNoHeap(heap3, 5, 10, 0, 0);
+	inserirNoHeap(heap3, 10, 3, 0, 0);
+	inserirNoHeap(heap3, 5, -1, 0, 0);
 
 	Heap* heap4 = criarHeap(3);
-	inserirNoHeap(heap4, -15, 10);
-      	inserirNoHeap(heap4, -10, 3);
-      	inserirNoHeap(heap4, -1, -1);
+	inserirNoHeap(heap4, -15, 10, 0, 0);
+      	inserirNoHeap(heap4, -10, 3, 0, 0);
+      	inserirNoHeap(heap4, -1, -1, 0, 0);
 
 	puts("heap1:");
 	imprimirHeap(heap);
@@ -62,7 +62,7 @@ void testeHeap()
 	puts("heap2 - remocao");
 	while(!empty(heap2))
 	{
-		No raiz = removeNoHeap(heap2);
+		Tupla raiz = removeNoHeap(heap2);
 
 		imprimirHeap(heap2);
 	}

@@ -4,24 +4,6 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-typedef struct
-{
-	int d;
-	int v;
-	int portais;
-	int heuristica;
-} Elemento;
-
-/*
-
-Heap* criarHeap(int n)
-{
-	Heap* heap = (Heap*) malloc(sizeof(Heap));
-	Elemento* elemento = 
-}
-
-
-*/
 
 Heap* criarHeap(int n)
 {
@@ -33,9 +15,9 @@ Heap* criarHeap(int n)
 	}
 	
 	Heap* heap = (Heap*) malloc(sizeof(Heap));
-	No* pares = (No*) malloc(sizeof(No) * (n + 2));
+	Tupla* tuplas = (Tupla*) malloc(sizeof(Tupla) * (n));
 
-	if(heap == NULL || pares == NULL)
+	if(heap == NULL || tuplas == NULL)
 	{
 		printf("A alocacao para o Heap falhou!");
 		exit(1);
@@ -43,9 +25,27 @@ Heap* criarHeap(int n)
 
 	heap->tamanho = n;
 	heap->ocupados = 0;
-	heap->vetor = pares;
+	heap->vetor = tuplas;
 
 	return heap;
+}
+
+void setTupla(Tupla* tupla, double dist, int vert, int port, double hstc)
+{
+	tupla->d = dist;
+	tupla->v = vert;
+	tupla->portais = port;
+	tupla->h = hstc;
+}
+
+int compararTuplas(Tupla a, Tupla b)
+{
+    	if (a.d > b.d) return 1;
+    	if (a.d < b.d) return -1;
+    	if (a.v > b.v) return 1;
+    	if (a.v < b.v) return -1;
+    
+	return 0;
 }
 
 int getAncestral(int i)
@@ -69,59 +69,33 @@ void destruirHeap(Heap* heap)
 	free(heap);
 }
 
-int compararNos(No a, No b)
+
+void inserirNoHeap(Heap* heap, double d, int v, int num_portais, double h)
 {
-	int v_a = getVertice(&a);
-	int v_b = getVertice(&b);
-	double d_a = getDistancia(&a);
-	double d_b = getDistancia(&b);
-
-
-    	if (d_a > d_b)
-        	return 1;
-    	if (d_a < d_b)
-        	return -1;
-    	if (v_a > v_b)
-        	return 1;
-  	if (v_a < v_b)
-        	return -1;
-   	 return 0;
-}
-
-void inserirNoHeap(Heap* heap, double d, int v)
-{
-	int i, pai, aux_v = 0;
-	double aux_d = 0;
-	No* pares = heap->vetor;
-
-	if(heap->ocupados == heap->tamanho) 
+    	if (heap->ocupados == heap->tamanho) 
 	{
-		printf("O heap está cheio!");
+        	printf("O heap está cheio!");
+        	exit(1);
+    	}
 
-		exit(1);
-	}
+    	Tupla novaTupla;
+    	setTupla(&novaTupla, d, v, num_portais, h);
+    	heap->vetor[heap->ocupados] = novaTupla;
 
-	setarNo(&pares[heap->ocupados], d, v);
-	//heap->ocupados++;
+    	int i = heap->ocupados;
+    	int pai = getAncestral(i);
 
-	i = heap->ocupados;
-	pai = getAncestral(i);
-	
-	while(compararNos(pares[i], pares[pai]) > 0)
+    	while (i > 0 && compararTuplas(heap->vetor[i], heap->vetor[pai]) > 0) 
 	{
-		// Troca pai pelo filho
-		aux_d = getDistancia(&pares[pai]);
-		aux_v = getVertice(&pares[pai]);
-		setarNo(&pares[pai], getDistancia(&pares[i]), getVertice(&pares[i]));
-	      	setarNo(&pares[i], aux_d, aux_v);
+        	Tupla temp = heap->vetor[i];
+        	heap->vetor[i] = heap->vetor[pai];
+        	heap->vetor[pai] = temp;
 
-	
-		// Atualiza os indices 
-		i = pai;
-		pai = (i - 1) / 2;
-	}
+        	i = pai;
+        	pai = getAncestral(i);
+    	}
 
-	heap->ocupados++;
+    	heap->ocupados++;
 }
 
 /*
@@ -179,59 +153,56 @@ No* removeNoHeap(Heap* heap)
 }
 */
 
-No removeNoHeap(Heap* heap)
+Tupla removeNoHeap(Heap* heap) 
 {
-    if (heap->ocupados == 0)
-    {
-        printf("O heap está vazio!\n");
-        exit(1);
-    }
+	if (heap->ocupados == 0) 
+	{
+        	printf("O heap está vazio!\n");
+        	exit(1);
+    	}
 
-    No raiz = heap->vetor[0];
-    No ultimo = heap->vetor[heap->ocupados - 1];
-    heap->vetor[0] = ultimo;
-    heap->ocupados--;
+    	Tupla raiz = heap->vetor[0];
+    	Tupla ultimo = heap->vetor[heap->ocupados - 1];
+    	heap->vetor[0] = ultimo;
+    	heap->ocupados--;
 
-    int i = 0;
-    while (1)
-    {
-        int l = getSucessorEsq(i);
-        int r = getSucessorDir(i);
-        int maior = i;
+    	int i = 0;
+    	while (1) 
+	{
+        	int l = getSucessorEsq(i);
+        	int r = getSucessorDir(i);
+        	int maior = i;
 
-        if (l < heap->ocupados &&
-            (heap->vetor[l].distancia > heap->vetor[maior].distancia ||
-             (heap->vetor[l].distancia == heap->vetor[maior].distancia && heap->vetor[l].vertice > heap->vetor[maior].vertice)))
-        {
-            maior = l;
-        }
+        	if (l < heap->ocupados && compararTuplas(heap->vetor[l], heap->vetor[maior]) > 0) 
+		{
+            		maior = l;
+        	}
 
-        if (r < heap->ocupados &&
-            (heap->vetor[r].distancia > heap->vetor[maior].distancia ||
-             (heap->vetor[r].distancia == heap->vetor[maior].distancia && heap->vetor[r].vertice > heap->vetor[maior].vertice)))
-        {
-            maior = r;
-        }
+        	if (r < heap->ocupados && compararTuplas(heap->vetor[r], heap->vetor[maior]) > 0) 
+		{
+        		maior = r;
+        	}
 
-        if (maior == i)
-            break;
+       	 	if (maior == i)
+            		break;
 
-        No temp = heap->vetor[i];
-        heap->vetor[i] = heap->vetor[maior];
-        heap->vetor[maior] = temp;
-        i = maior;
-    }
+        	Tupla temp = heap->vetor[i];
+        	heap->vetor[i] = heap->vetor[maior];
+        	heap->vetor[maior] = temp;
+        	i = maior;
+    	}
 
-    return raiz;
+    	return raiz;
 }
 
 
 void imprimirHeap(Heap* heap)
 {
-	printf("\nImpressão do Heap (distancia, vertice):\n");
+	Tupla* t = heap->vetor;
+	printf("\nImpressão do Heap (distancia, vertice, quantidade de portais, heuristica):\n");
 	for(int i = 0; i < heap->ocupados; i++)
 	{
-		printf("(%lf, %d)\n", heap->vetor[i].distancia, heap->vetor[i].vertice);
+		printf("(%lf, %d, %d, %lf)\n", t[i].d, t[i].v, t[i].portais, t[i].h);
 	}
 
 	printf("\n");

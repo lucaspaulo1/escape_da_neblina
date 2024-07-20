@@ -5,6 +5,7 @@
 #include "../include/graph.h"
 #include "../include/fila_prioridade.h"
 
-double* dijkstra(Grafo *g, double energia, int num_portais, int fonte);
+double* dijkstraPadrao(Grafo *g, int fonte);
+double* dijkstra(Grafo* g, double energia, int num_portais, int fonte);
 
 #endif

@@ -25,38 +25,44 @@ static void setarInfinito(double* vetor, int n)
 	puts("");
 }
 
-double* dijkstra(Grafo* g, double energia, int num_portais, int fonte) {
-    int n = quantidadeVertices(g);
-    Heap* heap = criarHeap(n);
-    No vertice;
-    double* dist = (double*) malloc(n * sizeof(double));
+double* dijkstraPadrao(Grafo* g, int fonte) 
+{
+    	int n = quantidadeVertices(g);
+    	Heap* heap = criarHeap(n);
+    	Tupla vertice;
+    	double* dist = (double*) malloc(n * sizeof(double));
 
-    for (int i = 0; i < n; i++) {
-        dist[i] = INFINITO;
-    }
+    	for (int i = 0; i < n; i++) 
+	{
+        	dist[i] = INFINITO;
+    	}
 
-    inserirNoHeap(heap, 0, fonte);
-    dist[fonte] = 0;
+    	inserirNoHeap(heap, 0, fonte, 0, 0);
+    	dist[fonte] = 0;
 
-    while (!empty(heap)) {
-        No e = removeNoHeap(heap);
-        int w = -getDistancia(&e);
-        int u = getVertice(&e);
+    	while (!empty(heap)) 
+	{
+        	Tupla e = removeNoHeap(heap);
+        	int w = -e.d;
+        	int u = e.v;
 
-        if (dist[u] < w) continue;
+        	if (dist[u] < w) continue;
 
-        Lista* listaVizinhos = vizinhosVertice(g, u);
-        No* vizinho = listaVizinhos->primeiro;
-        while (vizinho != NULL) {
-            int v = vizinho->vertice;
-            double n_w = vizinho->distancia;
-            if (dist[v] > w + n_w) {
-                dist[v] = w + n_w;
-                inserirNoHeap(heap, -(w + n_w), v);
-            }
-            vizinho = vizinho->proximo;
-        }
-    }
+        	Lista* listaVizinhos = vizinhosVertice(g, u);
+        	No* vizinho = listaVizinhos->primeiro;
+        	while (vizinho != NULL) 
+		{
+            		int v = vizinho->vertice;
+            		double n_w = vizinho->distancia;
+            		if (dist[v] > w + n_w) 
+			{
+                		dist[v] = w + n_w;
+                		inserirNoHeap(heap, -(w + n_w), v, 0, 0);
+            		}
+
+            		vizinho = vizinho->proximo;
+        	}
+    	}
 
 
     	puts("Vetor de distancias:");
@@ -66,5 +72,59 @@ double* dijkstra(Grafo* g, double energia, int num_portais, int fonte) {
 	}	
 	puts("SAINDO DA DIJKSTRA");
 
-    return dist;
+    	return dist;
 }
+
+double* dijkstra(Grafo* g, double energia, int num_portais, int fonte)
+{
+	int n = quantidadeVertices(g);
+    	Heap* heap = criarHeap(n);
+    	Tupla vertice;
+    	double* dist = (double*) malloc(n * sizeof(double));
+
+    	for (int i = 0; i < n; i++) 
+	{
+        	dist[i] = INFINITO;
+    	}
+
+    	inserirNoHeap(heap, 0, fonte,  num_portais, 0);
+    	dist[fonte] = 0;
+
+    	while (!empty(heap)) 
+	{
+        	Tupla e = removeNoHeap(heap);
+        	int w = -e.d;
+        	int u = e.v;
+
+        	if (dist[u] < w) continue;
+
+        	Lista* listaVizinhos = vizinhosVertice(g, u);
+        	No* vizinho = listaVizinhos->primeiro;
+        	while (vizinho != NULL) 
+		{
+            		int v = vizinho->vertice;
+            		double n_w = vizinho->distancia;
+            		if (dist[v] > w + n_w) 
+			{
+                		dist[v] = w + n_w;
+                		inserirNoHeap(heap, -(w + n_w), v, 0, 0);
+            		}
+		
+            		vizinho = vizinho->proximo;
+        	}
+    	}
+
+
+    	puts("Vetor de distancias:");
+	for(int i = 0; i < n; i++)
+	{
+		printf("%lf ", dist[i]);
+	}	
+	puts("SAINDO DA DIJKSTRA");
+	
+	destruirHeap(heap);
+
+    	return dist;	
+}
+
+
