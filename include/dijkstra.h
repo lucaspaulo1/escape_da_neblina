@@ -5,12 +5,6 @@
 #include "../include/graph.h"
 #include "../include/fila_prioridade.h"
 
-typedef struct
-{
-	int* vertices;
-	double menor_distancia;
-} Caminho;
-
-Caminho dijkstra(Grafo *g);
+double* dijkstra(Grafo *g, double energia, int num_portais, int fonte);
 
 #endif

@@ -3,6 +3,9 @@
 #include "../include/fila_prioridade.h"
 #include "../include/dijkstra.h"
 
+#include "stdio.h"
+#include "stdlib.h"
+
 #define INFINITO 0x3f3f3f3f
 
 static void setarInfinito(double* vetor, int n)
@@ -11,68 +14,57 @@ static void setarInfinito(double* vetor, int n)
 	{
 		vetor[i] = INFINITO;
 	}
-}
 
-static void iterarSobreVizinhos(Lista* lista, Heap* fila)
-{
-	No* aux = lista->primeiro;
-	No* vizinho;
-	double d;
-	double v;
+	puts("Printar vetor infinito");
 
-	while(aux->proximo != NULL)
+	for(int i = 0; i < n; i++)
 	{
-		d = getDistancia(aux);
-		v = getVertice(aux);
-		inserirNoHeap(fila, d, v);
-		aux = aux->proximo;
-	}
-}
-
-Caminho dijkstra(Grafo *g, int v)
-{
-	Heap* fila;
-	Lista* vertice = vizinhosVertice(g, v);
-	No* vizinho;
-	No raiz;
-	int tam = getTamanhoLista(vertice);
-	int n = quantidadeVertices(g);
-	int i, j = 0;
-	int raiz_d, raiz_v;
-	double* distancias = (double*) malloc(sizeof(double) * n);
-
-	setarInfinito();
-
-	// Adicionar os vizinhos de 'v' no Heap
-	while(i < tam) //Nao é uma boa maneira de iterar
-	{
-		vizinho = get(vertice, i);	
-		inserirNoHeap(fila, 0, vizinho);
-		i++;
+		printf("%lf ", vetor[i]);
 	}
 
-	while(!empty(fila))
-	{
-		raiz = removeNoHeap(fila);
-		raiz_d = getDistancia(raiz);
-	       	raiz_v = getVertice(raiz);	
-
-		if(distancias[raiz_v] <= raiz_d) continue;
-
-		distancias[raiz_v] = raiz_d;
-
-		vertice = vizinhosVertice(g, raiz_v);
-		vizinho = get(vertice, );
-		
-		for()
-		{
-
-		}
-	}
-
-	get
-
-
+	puts("");
 }
 
+double* dijkstra(Grafo* g, double energia, int num_portais, int fonte) {
+    int n = quantidadeVertices(g);
+    Heap* heap = criarHeap(n);
+    No vertice;
+    double* dist = (double*) malloc(n * sizeof(double));
 
+    for (int i = 0; i < n; i++) {
+        dist[i] = INFINITO;
+    }
+
+    inserirNoHeap(heap, 0, fonte);
+    dist[fonte] = 0;
+
+    while (!empty(heap)) {
+        No e = removeNoHeap(heap);
+        int w = -getDistancia(&e);
+        int u = getVertice(&e);
+
+        if (dist[u] < w) continue;
+
+        Lista* listaVizinhos = vizinhosVertice(g, u);
+        No* vizinho = listaVizinhos->primeiro;
+        while (vizinho != NULL) {
+            int v = vizinho->vertice;
+            double n_w = vizinho->distancia;
+            if (dist[v] > w + n_w) {
+                dist[v] = w + n_w;
+                inserirNoHeap(heap, -(w + n_w), v);
+            }
+            vizinho = vizinho->proximo;
+        }
+    }
+
+
+    	puts("Vetor de distancias:");
+	for(int i = 0; i < n; i++)
+	{
+		printf("%lf ", dist[i]);
+	}	
+	puts("SAINDO DA DIJKSTRA");
+
+    return dist;
+}

@@ -22,16 +22,13 @@ typedef struct s_grafo
 
 Grafo* novoGrafo();
 void deletaGrafo(Grafo* g);
-
 void insereVertice(Grafo* g);
 void insereAresta(Grafo* g, int v, double d, int w);
-
 int quantidadeVertices(Grafo* g);
 int quantidadeArestas(Grafo* g);
-
 int grauMinimo(Grafo* g);
 int grauMaximo(Grafo* g);
-
+Lista* vizinhosVertice(Grafo* g, int v);
 void imprimeVizinhos(Grafo* g, int v);
 void imprimeGrafo(Grafo* g);
 

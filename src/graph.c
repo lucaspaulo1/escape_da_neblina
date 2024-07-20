@@ -178,21 +178,32 @@ int grauMaximo(Grafo* g)
 
 Lista* vizinhosVertice(Grafo* g, int v)
 {
-	Lista* aux = g->listaAdj;
-	int tamanaho = grauMaximo(g);
-	int i = 0;
-	No* auxNo;
-	No* vizinhos = (No*) malloc(sizeof(No) * tamanho);
-
-	while(aux != NULL)
+	if (g == NULL) 
 	{
-		if(aux->item == v)
-		{
-			return aux;
-		}
+        	printf("O ponteiro do grafo é NULL\n");
+        	return NULL;
+    	}
 
-		aux = aux->proximaLista;
-	}
+    	if (g->listaAdj == NULL) 
+	{
+        	printf("O ponteiro listaAdj do grafo é NULL\n");
+        	return NULL;
+    	}
+
+    	Lista* aux = g->listaAdj;
+
+    	while (aux != NULL) 
+	{
+	    	if (aux->item == v) 
+		{
+            		return aux;
+        	}
+
+        	aux = aux->proximaLista;
+    	}
+
+    	printf("O indice do vertice nao foi encontrado. Um ponteiro Nulo sera retornado\n");
+    	return NULL;
 }
 
 void imprimeVizinhos(Grafo* g, int v)

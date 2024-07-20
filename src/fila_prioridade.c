@@ -4,6 +4,25 @@
 #include "stdio.h"
 #include "stdlib.h"
 
+typedef struct
+{
+	int d;
+	int v;
+	int portais;
+	int heuristica;
+} Elemento;
+
+/*
+
+Heap* criarHeap(int n)
+{
+	Heap* heap = (Heap*) malloc(sizeof(Heap));
+	Elemento* elemento = 
+}
+
+
+*/
+
 Heap* criarHeap(int n)
 {
 	if(n < 1)
