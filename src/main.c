@@ -4,7 +4,8 @@
 #include "../include/graph.h"
 #include "../include/fila_prioridade.h"
 #include "../include/dijkstra.h"
-
+#include "../include/testes.h"
+#include "../include/a_estrela.h"
 
 #include "math.h"
 #include "stdio.h"
@@ -34,11 +35,13 @@ int main()
 	double* distancias; // Vetor de distancias euclidianas de cada clareira para a saida
 
 	Grafo* grafo = novoGrafo();
-	
-    	scanf("%d %d %d", &n, &m, &k);
+	//testeSorvete();
+
+    	scanf("%d %d %d", &n, &m, &k); 
 
 	pontos = (Ponto*) malloc(sizeof(Ponto) * (n + 1));	
 	distancias = (double*) malloc(sizeof(double) * (n + 1));
+
 
 	// Verificacao da alocacao de memoria
 	if(pontos == NULL)
@@ -78,6 +81,7 @@ int main()
 		insereAresta(grafo, u, 0, v); // Cria a aresta com peso 0 (zero)
     	}
 
+	// Energia e quantidade de portais
     	scanf("%lf %d", &s, &q);
 
 	// Distancias ate a saida
@@ -85,10 +89,17 @@ int main()
 	{
 		distancias[i] = distanciaXY(pontos[i], saida);
 	}
-			
+
+	double* eisque = dijkstra(grafo, s, q, 0);
+	double resDijkstra = eisque[n-1];
+
+	if(resDijkstra <= s) puts("1");
+	else puts("0");
+
 	imprimeGrafo(grafo);
-	
-	free(pontos);
+	deletaGrafo(grafo);	
+
+	free(pontos); 
 
     	return 0;
 }

@@ -37,14 +37,14 @@ double* dijkstraPadrao(Grafo* g, int fonte)
         	dist[i] = INFINITO;
     	}
 
-    	inserirNoHeap(heap, 0, fonte, 0, 0);
+    	inserirNoHeap(heap, -0, fonte, 0, 0);
     	dist[fonte] = 0;
 
     	while (!empty(heap)) 
 	{
-        	Tupla e = removeNoHeap(heap);
-        	int w = -e.d;
-        	int u = e.v;
+        	vertice = removeNoHeap(heap);
+        	int w = -vertice.d;
+        	int u = vertice.v;
 
         	if (dist[u] < w) continue;
 
@@ -71,6 +71,8 @@ double* dijkstraPadrao(Grafo* g, int fonte)
 		printf("%lf ", dist[i]);
 	}	
 	puts("SAINDO DA DIJKSTRA");
+	
+	destruirHeap(heap);
 
     	return dist;
 }
@@ -81,6 +83,7 @@ double* dijkstra(Grafo* g, double energia, int num_portais, int fonte)
     	Heap* heap = criarHeap(n);
     	Tupla vertice;
     	double* dist = (double*) malloc(n * sizeof(double));
+	int portais;
 
     	for (int i = 0; i < n; i++) 
 	{
@@ -92,9 +95,10 @@ double* dijkstra(Grafo* g, double energia, int num_portais, int fonte)
 
     	while (!empty(heap)) 
 	{
-        	Tupla e = removeNoHeap(heap);
-        	int w = -e.d;
-        	int u = e.v;
+        	vertice = removeNoHeap(heap);
+        	int w = -vertice.d;
+        	int u = vertice.v;
+		int p = vertice.portais;
 
         	if (dist[u] < w) continue;
 
@@ -104,11 +108,25 @@ double* dijkstra(Grafo* g, double energia, int num_portais, int fonte)
 		{
             		int v = vizinho->vertice;
             		double n_w = vizinho->distancia;
-            		if (dist[v] > w + n_w) 
+
+            		if((dist[v] > w + n_w))
 			{
-                		dist[v] = w + n_w;
-                		inserirNoHeap(heap, -(w + n_w), v, 0, 0);
-            		}
+				dist[v] = w + n_w;
+
+				if(n_w == 0) 
+				{
+					if(p >= num_portais) 
+					{
+						vizinho = vizinho->proximo;
+						continue;
+					}
+
+					portais = p + 1;
+				}
+
+				inserirNoHeap(heap, -(w + n_w), v, portais, 0);
+				
+			}
 		
             		vizinho = vizinho->proximo;
         	}

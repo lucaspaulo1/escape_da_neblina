@@ -78,10 +78,10 @@ vector<int> dijkstraOne(Grafo &g, int source) {
     vector<int> distHeap(g.size(), INF); // Heap
 
 	Heap* heap = criarHeap(30); // Heap
-	No vertice; // Heap
+	Tupla vertice; // Heap
 
     fila.push({-0, source});
-    inserirNoHeap(heap, -0, source); // Heap
+    inserirNoHeap(heap, -0, source, 0, 0); // Heap
     dist[source] = 0;
     distHeap[source] = 0;
 
@@ -91,8 +91,8 @@ vector<int> dijkstraOne(Grafo &g, int source) {
         fila.pop();
 
 	vertice = removeNoHeap(heap); // HEap
-	int w1 = -getDistancia(&vertice); //-vertice.distancia; // HEap
-	int u1 = getVertice(&vertice); // HEap
+	int w1 = -vertice.d; // HEap
+	int u1 = vertice.v; // HEap
 
 	cout << "Conferir w e u: " << endl;
        	cout << "c++ " << " " << w << u << endl;
@@ -105,7 +105,7 @@ vector<int> dijkstraOne(Grafo &g, int source) {
                 dist[v] = w + n_w;
 		distHeap[v] = w1 + n_w; // Heap
                 fila.push({-(w + n_w), v});
-		inserirNoHeap(heap, -(w1 + n_w), v); // Heap 
+		inserirNoHeap(heap, -(w1 + n_w), v, 0, 0); // Heap 
             }
         }
     }

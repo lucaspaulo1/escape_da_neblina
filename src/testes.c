@@ -11,6 +11,7 @@
 #include "stdlib.h"
 
 #define MAX 100000
+#define INF 0x3f3f3f3f 
 
 void testeHeap()
 {
@@ -145,3 +146,74 @@ void testeListas(Grafo* g) {
         puts("");
     }
 }
+
+int min(int a, int b)
+{
+	if(a > b) return b; 
+
+	return a;
+}
+
+void testeDijkstra(Grafo* g)
+{
+
+}
+
+void testeSorvete()
+{
+	puts("entrou na funcao");
+
+	int N, M, X;
+	scanf("%d %d %d", &N, &M, &X);
+
+	Grafo* grp = novoGrafo();
+
+	puts("A");
+	for(int i = 0; i < N; i++)
+		insereVertice(grp);
+
+	puts("B");
+	int a, b, w;
+	for(int i = 0; i < M; i++)
+	{
+		scanf("%d %d %d", &a, &b, &w);
+		a--;
+		b--;
+		insereAresta(grp, a, w, b);
+		insereAresta(grp, b, w, a);
+	}
+
+	puts("C");
+	int* friends = (int*) malloc(sizeof(int) * X);
+	for(int i = 0; i < X; i++)
+		scanf("%d", &friends[i]);
+
+	
+	puts("D");
+	double* dist_to_friends = dijkstraPadrao(grp, 0);
+	double* dist_to_icecream = dijkstraPadrao(grp, N-1);
+	
+	puts("E");
+	int ans = INF;
+	for(int i = 0; i < X; i++)
+	{
+		int fr = friends[i];
+		int w = (int) dist_to_friends[fr-1] + dist_to_icecream[fr-1];
+		ans = min(ans, w);
+	}
+	
+	puts("");
+	printf("Problema do sorvete: %d\n", ans);
+
+	free(friends);	
+	free(dist_to_friends);
+	free(dist_to_icecream);
+	
+	imprimeGrafo(grp);
+	deletaGrafo(grp);
+}
+
+
+
+
+
