@@ -43,7 +43,7 @@ double* dijkstraPadrao(Grafo* g, int fonte)
     	while (!empty(heap)) 
 	{
         	vertice = removeNoHeap(heap);
-        	int w = -vertice.d;
+        	double w = -vertice.d;
         	int u = vertice.v;
 
         	if (dist[u] < w) continue;
@@ -83,14 +83,15 @@ double* dijkstra(Grafo* g, double energia, int num_portais, int fonte)
     	Heap* heap = criarHeap(n);
     	Tupla vertice;
     	double* dist = (double*) malloc(n * sizeof(double));
-	int portais;
+	int portais = 0;
+	double aux;
 
     	for (int i = 0; i < n; i++) 
 	{
         	dist[i] = INFINITO;
     	}
 
-    	inserirNoHeap(heap, 0, fonte,  num_portais, 0);
+    	inserirNoHeap(heap, 0, fonte,  0, 0);
     	dist[fonte] = 0;
 
     	while (!empty(heap)) 
@@ -111,12 +112,14 @@ double* dijkstra(Grafo* g, double energia, int num_portais, int fonte)
 
             		if((dist[v] > w + n_w))
 			{
+				aux = dist[v];
 				dist[v] = w + n_w;
 
 				if(n_w == 0) 
 				{
 					if(p >= num_portais) 
 					{
+						dist[v] = aux;
 						vizinho = vizinho->proximo;
 						continue;
 					}

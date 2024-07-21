@@ -154,8 +154,82 @@ int min(int a, int b)
 	return a;
 }
 
-void testeDijkstra(Grafo* g)
+void testeDijkstra()
 {
+	Grafo* g = novoGrafo();
+
+	int n = 8;
+	int energia = 5;
+	int portais = 2;
+	int saida = n - 1;
+
+	for(int i = 0; i < n; i++)
+	{
+		insereVertice(g);
+	}
+
+	insereAresta(g, 0, 0, 1);
+	insereAresta(g, 0, 2, 2);
+	insereAresta(g, 0, 3, 3);
+	insereAresta(g, 1, 0, 4);
+	insereAresta(g, 2, 4, 7);
+	insereAresta(g, 3, 1, 5);
+	insereAresta(g, 4, 0, 7);
+	insereAresta(g, 5, 0, 6);
+	insereAresta(g, 6, 1, 7);
+	
+	imprimeGrafo(g);
+
+	double* dist = dijkstra(g, energia, portais, 0);
+
+	puts("");
+	for(int i = 0; i < n; i++)
+	{
+		printf("%lf ", dist[i]);
+	}
+	puts("");
+
+	printf("distancia ate a saida: %lf\n\n", dist[saida]);
+
+
+	Grafo* g2 = novoGrafo();
+	n = 7;
+	saida = n - 1;
+	energia = 10;
+	portais = 2;
+
+	for(int i = 0; i < n; i++) insereVertice(g2);
+
+	insereAresta(g2, 0, 0, 1);
+       	insereAresta(g2, 1, 0, 2);
+	insereAresta(g2, 1, 0, 3);
+	insereAresta(g2, 2, 1, 4);
+	insereAresta(g2, 2, 0, 5);
+	insereAresta(g2, 3, 3, 6);
+	insereAresta(g2, 4, 1, 6);
+	insereAresta(g2, 5, 1, 6);
+
+	imprimeGrafo(g2);
+
+	double* dist2 = dijkstra(g2, energia, portais, 0);
+	printf("distancia ate a saida: %lf\n\n", dist2[saida]);
+
+	Grafo* g3 = novoGrafo();
+	n = 4;
+	saida = n - 1;
+	energia = 5;
+	portais = 0;
+	for(int i = 0; i < n; i++) insereVertice(g3);
+
+	insereAresta(g3, 0, 0, 1);
+	insereAresta(g3, 0, 1, 2);
+      	insereAresta(g3, 1, 1, 3);
+	insereAresta(g3, 2, 1, 1);
+	insereAresta(g3, 2, 4, 3);
+
+	imprimeGrafo(g3);
+	double* dist3 = dijkstra(g3, energia, portais, 0);
+       	printf("distancia ate a saida: %lf\n\n", dist3[saida]);	
 
 }
 

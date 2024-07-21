@@ -20,7 +20,7 @@ $(EXE): $(OBJS)
 
 # Regra para compilar cada arquivo-fonte
 $(OBJ)/%.o: $(SRC)/%.c $(wildcard $(INC)/*.h)
-	$(CC) $(CFLAGS) -o $@ -c $<
+	$(CC) -g $(CFLAGS) -o $@ -c $<
 
 # Limpeza
 clean:

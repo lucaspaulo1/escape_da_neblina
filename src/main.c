@@ -72,7 +72,7 @@ int main()
         	scanf("%d %d", &u, &v);
 		d = distanciaXY(pontos[u], pontos[v]);
 		insereAresta(grafo, u, d, v); // Cria a aresta peso (distancia)
-    	}
+	}
     
 	// Clareiras com portais (arestas)
     	for(int i = 0; i < k; i++)
@@ -100,6 +100,8 @@ int main()
 	deletaGrafo(grafo);	
 
 	free(pontos); 
+
+	testeDijkstra();
 
     	return 0;
 }

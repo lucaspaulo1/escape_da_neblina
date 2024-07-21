@@ -23,7 +23,7 @@ double getYPonto(Ponto* p)
 double distanciaXY(Ponto p1, Ponto p2)
 {
 	double a = p2.x - p1.x;
-	double b = p2.y - p2.y;
+	double b = p2.y - p1.y;
 	double h = pow(a, 2) + pow(b, 2);
 
 	return sqrt(h);

@@ -6,7 +6,7 @@ void testeVertices();
 void testeGrafo(Grafo* g);
 void testeListas(Grafo* g);
 int min(int a, int b);
-void testeDijkstra(Grafo* g);
+void testeDijkstra();
 void testeSorvete();
 
 #endif 
