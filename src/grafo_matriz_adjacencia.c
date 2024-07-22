@@ -6,100 +6,104 @@
 
 GrafoMatriz* criaMatriz(int n)
 {
-	GrafoMatriz* grafo = (GrafoMatriz*) malloc(sizeof(grafo)); // Aloca dimaicamente o Grafo a ser retornado
-	
-	if(grafo == NULL)
-	{
-		printf("A alocacao de memoria para o 'GrafoMatriz' falhou\n");
+	GrafoMatriz* grafo = (GrafoMatriz*) malloc(sizeof(GrafoMatriz)); // Aloca dimaicamente o Grafo a ser retornado
+    
+    	if(grafo == NULL)
+    	{
+        	printf("A alocacao de memoria para o 'GrafoMatriz' falhou\n");
+        	exit(1);
+    	}
 
-		exit(1);
-	}
+    	grafo->n = n;    
+    	grafo->matriz = (No**) malloc(sizeof(No*) * n); // Aloca dinamicamente uma matriz quadrada de tamanho 'n'
 
-	grafo->n = n;	
-	grafo->matriz = (No**) malloc(sizeof(No*) * n); // Aloca dinamicamente uma matriz quadrada de tamanho 'n'
+    	// Verifica se a matriz foi criada corretamente
+    	if(grafo->matriz == NULL)
+    	{
+        	printf("A alocacao de memoria da Matriz de adjacencia falhou!\n");
+        	free(grafo); // Libera a memoria alocada para o grafo
+        	exit(1);
+    	}
 
-	// Verifica se a matriz foi criada corretamente
-	if(grafo->matriz == NULL)
-	{
-		printf("A alocacao de memoria da Matriz de adjacencia falhou!\n");
+    	// Aloca dinamicamente as linhas da matriz 
+    	for (int i = 0; i < n; i++) 
+    	{
+        	grafo->matriz[i] = (No*) malloc(sizeof(No) * n);
+        	if(grafo->matriz[i] == NULL)
+        	{
+            		printf("A alocacao de memoria para a linha '%d' da matriz falhou!\n", i);
 
-		free(grafo); // Libera a memoria alocada para o grafo
-		exit(1);
-	}
-
-	// Aloca dinamicamente as linhas da matriz 
-	for (int i = 0; i < n; i++) 
-	{
-    		grafo->matriz[i] = (No*) malloc(sizeof(No) * n);
-		if(grafo->matriz[i] == NULL)
-		{
-			printf("a alocacao de memoria para a linha '%d' da matriz falhou!\n", i);
-
-			// Desaloca a memoria alocada anteriormente 
-			for(int j = 0; j < n; j++) free(grafo->matriz[j]);
+            		// Desaloca a memoria alocada anteriormente 
+            		for(int j = 0; j < i; j++) free(grafo->matriz[j]);
+            		
 			free(grafo->matriz);
-			free(grafo);
+            		free(grafo);
 
-			exit(1);
-		}
-	}
+            		exit(1);
+        	}
 
-	return grafo;
+		// Inicializa todos os elementos da linha
+       	 	for (int j = 0; j < n; j++) 
+		{
+            		grafo->matriz[i][j].vertice = 0;
+            		grafo->matriz[i][j].distancia = 0.0;
+        	}
+    	}
+
+
+    	return grafo;
 }
 
 void destroiMatriz(GrafoMatriz* g)
 {
-	int m = g->n;
-	for(int i = 0; i < m; i++)
-	{
-		free(g->matriz[i]);
-	}
+    int m = g->n;
+    for(int i = 0; i < m; i++)
+    {
+        free(g->matriz[i]);
+    }
 
-	free(g->matriz);
-	free(g);
+    free(g->matriz);
+    free(g);
 }
 
 void insereArestaNaMatriz(GrafoMatriz* g, int i, int j, double d)
 {
-	No* aux = &g->matriz[i][j];
-	int m = g->n; // Quantidade de vertices
+    No* aux = &g->matriz[i][j];
+    int m = g->n; // Quantidade de vertices
 
-	if(i > m || j > m)
-	{
-		printf("Vertice Invalido!\n");
-	}
+    if(i >= m || j >= m) // Corrigi o índice fora dos limites
+    {
+        printf("Vertice Invalido!\n");
+        return; // Adiciona um retorno para evitar comportamento indefinido
+    }
 
-	//setarNo(&aux, d, 1); // O '1' define que existe uma aresta com peso 'd' entre o vertice [i][j]
-	aux->vertice = 1;
-	aux->distancia = d;
+    aux->vertice = 1;
+    aux->distancia = d;
 }
 
 void imprimeMatriz(GrafoMatriz* g)
 {
-	int m = g->n; // Tamanho da matriz
-	int v = 0; // Representa o vertice 
-	double d = 0; // Tamanho da aresta ponderada
-		      
-	puts("Matriz de adjacencia: ");
-	for(int i = 0; i < m; i++)
-	{
-		printf("%d: ", i); // Printa o vertice 'i'
-		for(int j = 0; j < m; j++)
-		{	
-			v = g->matriz[i][j].vertice;
-			d = g->matriz[i][j].distancia;
+    int m = g->n; // Tamanho da matriz
+    int v = 0; // Representa o vertice 
+    double d = 0; // Tamanho da aresta ponderada
+              
+    puts("Matriz de adjacencia: ");
+    for(int i = 0; i < m; i++)
+    {
+        printf("%d: ", i); // Printa o vertice 'i'
+        for(int j = 0; j < m; j++)
+        {    
+            v = g->matriz[i][j].vertice;
+            d = g->matriz[i][j].distancia;
 
-			// Verifica se existe '1', ou seja, se existe aresta entre 'i' e 'j'
-			if(v == 1)
-			{
-				printf("(%lf, %d)", d, j); // Printa os vizinhos do vertice 'i'
-			}
-		}
-		puts("");
-	}
-	puts("");
+            // Verifica se existe '1', ou seja, se existe aresta entre 'i' e 'j'
+            if(v == 1)
+            {
+                printf("(%lf, %d)", d, j); // Printa os vizinhos do vertice 'i'
+            }
+        }
+        puts("");
+    }
+    puts("");
 }
-
-
-
 

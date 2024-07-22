@@ -32,5 +32,5 @@ run: $(EXE)
 
 # Regra para executar o Valgrind
 valgrind: $(EXE)
-	valgrind --leak-check=full --show-leak-kinds=all ./$(EXE) < inputs.txt
+	valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(EXE) < inputs.txt
 

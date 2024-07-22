@@ -107,7 +107,7 @@ double* aEstrela(Grafo* grafo, double* heuristica, double energia, int num_porta
 		exit(1);
 	}
 
-	for(int i = 0; i < n; i++) caminho_fechado[i] = INFINITO;
+	setarInfinito(caminho_fechado, n);
 
 	// Para a fonte (clareira inicial)
 	inserirNoHeap(fila, -0, fonte, 0, 0);
@@ -170,6 +170,157 @@ double* aEstrela(Grafo* grafo, double* heuristica, double energia, int num_porta
 	destruirHeap(fila); // Desalaoca a memoria usada no Heap
 
 	return caminho_fechado;
+}
+
+double* dijkstraMatriz(GrafoMatriz* g, double energia, int num_portais, int fonte) 
+{
+    	int n = g->n; // Quantidade de vertices do grafo
+    	Heap* heap = criarHeap(n); // Cria o heap
+    	Tupla vertice; // Tupla representando os caminhos e vertices (clareiras) com os portais e heuristica
+    	double* dist = (double*) malloc(n * sizeof(double)); // Vetor de distancias do vertice inicial a todo outro vertice do grafo
+    	int portais = 0; // Quantidade de portais usada
+    	double aux;
+
+    	// Verifica a alocacao de memoria
+    	if (dist == NULL) 
+	{
+        	printf("A alocacao falhou para 'dist'!\n");
+        	exit(1);
+    	}
+
+    	setarInfinito(dist, n);
+
+    	// Colocar o vertice inicial no heap e atualizar a distancia dele para ele mesmo
+    	inserirNoHeap(heap, 0, fonte, 0, 0);
+    	dist[fonte] = 0;
+
+    	// Loop representando o processo de caminhar no grafo para encontrar a menor distancia para cada vertice
+    	while (!empty(heap)) 
+	{
+        	vertice = removeNoHeap(heap); // Remove a raiz do Heap
+        	double w = -vertice.d;
+        	int u = vertice.v;
+        	int p = vertice.portais; // Representa o numero de portais do associado ao vertice no contexto do caminho
+
+        	if (dist[u] < w) continue; // Verifica se o vertice ja foi visitado
+
+        	// Itera sobre os vizinhos usando a matriz de adjacência
+        	for (int v = 0; v < n; v++) 
+		{
+            		if (g->matriz[u][v].vertice == 1)  // Verifica se existe uma aresta entre u e v
+			{
+				double n_w = g->matriz[u][v].distancia;
+
+                		if ((dist[v] > w + n_w)) // Verifica se o caminho atual eh o menor
+                    		{
+					aux = dist[v];
+                    			dist[v] = w + n_w;
+
+                    			if (n_w == 0) // Verifica se a aresta representa um portal
+					{
+						if (p >= num_portais)  // Verifica se a quantidade de portais usadas no caminho eh valida
+						{
+							dist[v] = aux;
+                            				continue;
+                        			}
+
+                        			portais = p + 1; // Atualiza o numero de portais usados no caminho
+                    			}
+
+                    			inserirNoHeap(heap, -(w + n_w), v, portais, 0); // Insere no heap o vertice com sua distancia e quantidade de portais usados ate o momento
+                		}
+            		}
+        	}
+    	}
+
+    	destruirHeap(heap); // Desaloca a memoria usada no heap
+
+    	return dist;
+}
+
+double* aEstrelaMatriz(GrafoMatriz* grafo, double* heuristica, double energia, int num_portais, int fonte, int objetivo) {
+    	int n = grafo->n; // Quantidade de vertices do grafo
+    	Heap* fila = criarHeap(n); // Cria um Heap com 'n' espacos disponiveis
+    	Tupla vertice; // Tupla representando os caminhos e vertices (clareiras)
+    	double* caminho_fechado; // Caminho dos nos que serao usados pra calcular a menor distancia
+    	double aux;
+    	double g = 0; // Representa a distancia entre clareira passada e a atual (trilha)
+    	double h = 0; // Representa a heuristica do vertice atual
+    	double f = 0; // Representa a funcao de custo
+    	int portais = 0;
+
+    	caminho_fechado = (double*) malloc(sizeof(double) * n);
+
+    	// Verifica a alocacao de memoria
+    	if (caminho_fechado == NULL) 
+	{
+        	printf("A alocacao falhou para 'caminho_fechado'!\n");
+        	exit(1);
+    	}
+
+	setarInfinito(caminho_fechado, n);
+
+    	// Para a fonte (clareira inicial)
+    	inserirNoHeap(fila, -0, fonte, 0, 0);
+    	caminho_fechado[fonte] = 0;
+
+    	// Loop representando o processo de caminhar no grafo para encontrar a menor distancia para cada vertice
+    	while (!empty(fila)) {
+        	// Remove a raiz do Heap e pega seus dados
+        	vertice = removeNoHeap(fila);
+        	double w = -vertice.d;
+        	int u = vertice.v;
+        	int p = vertice.portais;
+
+        	// Verifica se a saida e a entrada sao iguais
+        	if (u == objetivo) break;
+
+        	// Verifica se o
+        	if (caminho_fechado[u] < w) continue;
+
+        	// Itera sobre os vizinhos usando a matriz de adjacência
+        	for (int v = 0; v < n; v++) {
+            		if (grafo->matriz[u][v].vertice == 1) // Verifica se existe uma aresta entre u e v
+			{
+				double n_w = grafo->matriz[u][v].distancia;
+               	 		g = w + n_w; // Calcula o tamanho do caminho atual adicionado a distancia ate o vertice atual
+
+                		// Verifica se o caminho atual eh o menor            
+				if (caminho_fechado[v] > g) 
+				{
+                    			aux = caminho_fechado[v];
+                    			caminho_fechado[v] = g;
+                    			h = heuristica[v]; // Pega a distancia em linha reta do vertice atual ate a saida
+                    			f = (-g) + (-h); // Calcula a funcao de custo
+
+                    			// Verifica se a aresta atual eh um portal
+                    		if (n_w == 0) 
+				{
+                        		if (p >= num_portais) // Verifica se a quantidade de portais usadas no caminho eh valida
+					{
+						caminho_fechado[v] = aux;
+                            		continue;
+                        		}
+
+                        		portais = p + 1; // Atualiza a quantidade de portais usada
+                    		}
+
+                    			inserirNoHeap(fila, -g, v, portais, f); // Insere no Heap a tupla com a funcao de custo calculada
+                		}
+            		}
+        	}
+    	}
+
+    	destruirHeap(fila); // Desaloca a memoria usada no Heap
+
+    	return caminho_fechado;
+}
+
+int ehPossivel(double distancia, double energia)
+{
+	if(distancia > energia) return 0;
+
+	return 1;
 }
 
 void encontraCaminho(Grafo* g, int n, double energia, int num_portais, double* heuristica)

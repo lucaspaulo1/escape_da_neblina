@@ -30,6 +30,15 @@ double* dijkstra(Grafo* g, double energia, int num_portais, int fonte);
  */
 double* aEstrela(Grafo* g, double* heuristica, double energia, int num_portais, int fonte, int objetivo);
 
+/*
+ * Algoritmo do Dijkstra mas agora usando a implementacao do Grafo como matriz de adjacencia
+ */
+double* dijkstraMatriz(GrafoMatriz* g, double energia, int num_portais, int fonte);
+
+/*
+ * asd
+ */
+double* aEstrelaMatriz(GrafoMatriz* g, double* heuristica, double energia, int num_portais, int fonte, int objetivo);
 
 /*
  * Usa os dois algoritmos: Dijkstra e A* para verificar se Linque consegue escapar da floresta
