@@ -3,8 +3,7 @@
 #include "../include/lista_encadeada.h"
 #include "../include/graph.h"
 #include "../include/fila_prioridade.h"
-#include "../include/dijkstra.h"
-
+#include "../include/encontrar_caminho.h"
 
 #include "math.h"
 #include "stdio.h"
@@ -233,6 +232,7 @@ void testeDijkstra()
 
 }
 
+/*
 void testeSorvete()
 {
 	puts("entrou na funcao");
@@ -290,4 +290,4 @@ void testeSorvete()
 
 
 
-
+*/

@@ -3,9 +3,8 @@
 #include "../include/lista_encadeada.h"
 #include "../include/graph.h"
 #include "../include/fila_prioridade.h"
-#include "../include/dijkstra.h"
+#include "../include/encontrar_caminho.h"
 #include "../include/testes.h"
-#include "../include/a_estrela.h"
 
 #include "math.h"
 #include "stdio.h"
@@ -14,6 +13,9 @@
 #define ENDL "\n"
 
 
+/*
+ * Calcula o minimo entre dois inteiros
+ */
 static int minimo(int a, int b) {
     if(a > b) return b;
 
@@ -31,7 +33,6 @@ int main()
     	double d; // Distancia euclideana de um ponto para outro
 	Ponto* pontos; // Coordenadas dos vertices
 	Ponto saida;; // Representa a saida da floresta
-	int j; // Indice
 	double* distancias; // Vetor de distancias euclidianas de cada clareira para a saida
 
 	Grafo* grafo = novoGrafo();
@@ -57,14 +58,14 @@ int main()
 	}
 
 	// Coordenadas das clareiras (vertices)
-    	for(j = 0; j < n; j++)
+    	for(int j = 0; j < n; j++)
     	{
         	scanf("%lf %lf", &x, &y);
 		insereVertice(grafo); // Criar um vertice 'i'
 		setPonto(&pontos[j], x, y); // Coloca as coordenadas do vertice no vetor
     	}
 
-	saida = pontos[j];
+	saida = pontos[n-1];
     
 	// Trilhas entre clareiras (arestas)
     	for(int i = 0; i < m; i++)
@@ -90,18 +91,14 @@ int main()
 		distancias[i] = distanciaXY(pontos[i], saida);
 	}
 
-	double* eisque = dijkstra(grafo, s, q, 0);
-	double resDijkstra = eisque[n-1];
+	// Verifica se Linque conseguira escapar da floresta
+	encontraCaminho(grafo, n, s, q, distancias);
 
-	if(resDijkstra <= s) puts("1");
-	else puts("0");
-
-	imprimeGrafo(grafo);
+	//imprimeGrafo(grafo);
 	deletaGrafo(grafo);	
 
+	free(distancias);
 	free(pontos); 
-
-	testeDijkstra();
 
     	return 0;
 }

@@ -40,10 +40,22 @@ void setTupla(Tupla* tupla, double dist, int vert, int port, double hstc)
 
 int compararTuplas(Tupla a, Tupla b)
 {
-    	if (a.d > b.d) return 1;
-    	if (a.d < b.d) return -1;
-    	if (a.v > b.v) return 1;
-    	if (a.v < b.v) return -1;
+	if((a.h == 0) && (b.h == 0))
+	{
+    		if (a.d > b.d) return 1;
+    		if (a.d < b.d) return -1;
+    		if (a.v > b.v) return 1;
+    		if (a.v < b.v) return -1;
+	}
+	else
+	{
+		if(a.h > b.h) return 1;
+		if(a.h < b.h) return -1;
+		if(a.d > b.d) return 1;
+		if(a.d < b.d) return -1;
+		if(a.v > b.v) return 1;
+		if(a.v < b.v) return -1;
+	}
     
 	return 0;
 }
@@ -173,11 +185,13 @@ Tupla removeNoHeap(Heap* heap)
         	int r = getSucessorDir(i);
         	int maior = i;
 
+		// Verifica se o filho eh maior que o pai
         	if (l < heap->ocupados && compararTuplas(heap->vetor[l], heap->vetor[maior]) > 0) 
 		{
             		maior = l;
         	}
 
+		// Verifica se o filho eh maior que o pai
         	if (r < heap->ocupados && compararTuplas(heap->vetor[r], heap->vetor[maior]) > 0) 
 		{
         		maior = r;

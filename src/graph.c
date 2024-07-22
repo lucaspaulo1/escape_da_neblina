@@ -5,12 +5,6 @@
 
 Grafo* novoGrafo()
 {
-	/*
-	No* novo_vertice = (No*) malloc(sizeof(No));
-	novo_vertice->v = 0;
-	novo_vertice->proximo = NULL;
-	*/
-
 	Grafo* g = (Grafo*) malloc(sizeof(Grafo));
 	g->tamanho = 0;
 	g->listaAdj = NULL;
@@ -54,18 +48,15 @@ void insereVertice(Grafo* g)
 		{
 			aux = aux->proximaLista;
 		}
-		//g->listaAdj->proximaLista = vertice;
 		aux->proximaLista = vertice;
 	}
 
-	//printf("Vertice inserido\n");
 	g->tamanho++;	
 }
 
 void insereAresta(Grafo* g, int v, double d, int w)
 {
 	Lista* aux = g->listaAdj;
-	//No* temp;
 
 	if(v < 0 || v > g->tamanho)
 	{
@@ -73,7 +64,7 @@ void insereAresta(Grafo* g, int v, double d, int w)
 	}
 	else
 	{
-		while(/*aux->proximaLista != NULL*/ aux != NULL)
+		while(aux != NULL)
                 {
                         if(aux->item == v)
                         {
@@ -84,7 +75,6 @@ void insereAresta(Grafo* g, int v, double d, int w)
                         aux = aux->proximaLista;
                 }
 
-		//printf("aresta inserida\n");
 	}
 }
 
@@ -96,7 +86,6 @@ int quantidadeVertices(Grafo* g)
 
 int quantidadeArestas(Grafo* g)
 {
-	//printf("\nDentro da função qnt arestas\n");
 
 	Lista* aux = g->listaAdj;
         int quantidadeVertices = 0;
@@ -111,7 +100,6 @@ int quantidadeArestas(Grafo* g)
         while(aux != NULL)
         {
                 quantidadeVertices += aux->vertices;
-		//printf("qnt de vertices da lista %d : %d\n", aux->item, aux->vertices);
                 aux = aux->proximaLista;
         }
 	
