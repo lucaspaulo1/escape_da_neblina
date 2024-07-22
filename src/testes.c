@@ -2,6 +2,7 @@
 #include "../include/no.h"
 #include "../include/lista_encadeada.h"
 #include "../include/graph.h"
+#include "../include/grafo_matriz_adjacencia.h"
 #include "../include/fila_prioridade.h"
 #include "../include/encontrar_caminho.h"
 
@@ -230,6 +231,27 @@ void testeDijkstra()
 	double* dist3 = dijkstra(g3, energia, portais, 0);
        	printf("distancia ate a saida: %lf\n\n", dist3[saida]);	
 
+}
+
+void testeMatriz()
+{
+	int k = 5;
+	GrafoMatriz* g = criaMatriz(k);
+	int m = g->n;
+
+	printf("m: %d\n", m);
+	for(int i = 0; i < k; i++);
+
+	// vertice, vertice, distancia
+	insereArestaNaMatriz(g, 0, 1, 1);
+       	insereArestaNaMatriz(g, 0, 2, 0);
+	insereArestaNaMatriz(g,	0, 3, 1);
+	insereArestaNaMatriz(g, 1, 4, 10.198);
+	insereArestaNaMatriz(g, 2, 4, 10);
+	insereArestaNaMatriz(g, 3, 4, 0);
+
+	imprimeMatriz(g);
+	destroiMatriz(g);
 }
 
 /*

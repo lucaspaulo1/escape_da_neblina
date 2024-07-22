@@ -58,7 +58,7 @@ void insereFinal(Lista* l, double d, int v)
 	}
 	else
 	{
-		l->ultimo->proximo = no;
+		l->ultimo->proximo = no; // Insere o No ao final da lista
 		l->ultimo = no;
 		l->vertices++;
 	}

@@ -1,5 +1,6 @@
 #include "../include/no.h"
 #include "../include/graph.h"
+#include "../include/grafo_matriz_adjacencia.h"
 #include "../include/fila_prioridade.h"
 #include "../include/encontrar_caminho.h"
 
