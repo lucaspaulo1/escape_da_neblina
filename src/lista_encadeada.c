@@ -5,7 +5,7 @@
 
 Lista* criarLista(int idVertice)
 {
-	Lista* lista = (Lista*) malloc(sizeof(Lista));
+	Lista* lista = (Lista*) malloc(sizeof(Lista)); // Aloca dinamicamente a memoria na pilha
 	lista->primeiro = NULL;
 	lista->ultimo = NULL;
 	lista->proximaLista = NULL;
@@ -29,6 +29,7 @@ No* get(Lista* l, int v)
 {
 	No* aux = l->primeiro;
 
+	// Itera sobre a lista "pulando" para o proximo No 
 	while(aux != NULL)
 	{
 		if(aux->vertice == v)
@@ -48,6 +49,7 @@ void insereFinal(Lista* l, double d, int v)
 {
 	No* no = criarNo(d, v);
 	
+	// Verifica se a lista esta vazia
 	if(listaVazia(l))
 	{
 		l->primeiro = no;
@@ -64,12 +66,14 @@ void insereFinal(Lista* l, double d, int v)
 
 void removeFinal(Lista* l)
 {
+	// Verifica se a lista esta vazia
 	if(l->primeiro == NULL)
 	{
 		printf("\nLista vazia!\n");
 	}
 	else
 	{
+		// Verifica se a lista tem exatamente um No (vertice)
 		if(l->vertices == 1)
 		{
 			free(l->primeiro);
@@ -110,6 +114,7 @@ void imprimirLista(Lista* l)
 
 void destruirLista(Lista* l)
 {
+	// Enquanto a lista nao estiver vazia, remove cada No um por um
 	while(!listaVazia(l))
 	{
 		removeFinal(l);

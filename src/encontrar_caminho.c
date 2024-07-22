@@ -10,7 +10,7 @@ void setarInfinito(double* vetor, int n)
 {
 	for(int i = 0; i < n; i++)
 	{
-		vetor[i] = INFINITO;
+		vetor[i] = INFINITO; // Constante 'INFINITO' foi definida no arquivo .h
 	}
 }
 
@@ -159,7 +159,7 @@ double* aEstrela(Grafo* grafo, double* heuristica, double energia, int num_porta
 					portais = p + 1; // Atualiza a quantidade de portais usada
 				}	
 
-				inserirNoHeap(fila, -g, v, portais, f);
+				inserirNoHeap(fila, -g, v, portais, f); // Insere no Heap a tupla com a funcao de custo calculada
 			}
 
 			vizinho = vizinho->proximo; // Pega o proximo vizinho
@@ -180,9 +180,11 @@ void encontraCaminho(Grafo* g, int n, double energia, int num_portais, double* h
 	double resposta_dijkstra = menor_caminho_dijkstra[saida];
 	double resposta_a_estrela = menor_caminho_a_estrela[saida];
 
+	// Printa '1' caso Linque consiga escapar usando o Dijkstra e '0' caso contrario
 	if(resposta_dijkstra <= energia) printf("1 ");
 	else printf("0");
 
+	// Printa '1' caso Linque consiga escapar usando o A* e '0' caso contrario
 	if(resposta_a_estrela <= energia) printf("1\n");
 	else printf("0\n");
 

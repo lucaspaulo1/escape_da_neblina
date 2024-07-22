@@ -5,7 +5,7 @@
 
 Grafo* novoGrafo()
 {
-	Grafo* g = (Grafo*) malloc(sizeof(Grafo));
+	Grafo* g = (Grafo*) malloc(sizeof(Grafo)); // Aloca dinamicamente a memoria necessaria na pilha
 	g->tamanho = 0;
 	g->listaAdj = NULL;
 
@@ -14,6 +14,7 @@ Grafo* novoGrafo()
 
 void deletaGrafo(Grafo* g)
 {
+	// Verifica se o grafo esta vazio
 	if(g->listaAdj == NULL)
 	{
 		printf("\nLista de adjacencia vazia!\n");
@@ -22,6 +23,7 @@ void deletaGrafo(Grafo* g)
 	{
 		Lista* aux = g->listaAdj;
 
+		// Destroi as listas uma por uma
 		while(aux != NULL)
 		{
 			g->listaAdj = g->listaAdj->proximaLista;
@@ -29,14 +31,17 @@ void deletaGrafo(Grafo* g)
 			aux = g->listaAdj;
 		}
 	}
+
+	// Desaloca a estrutura Grafo depois que todas listas sao destruidas
 	free(g);
 }
 
 void insereVertice(Grafo* g)
 {
 	int numeroVertice = g->tamanho;
-	Lista* vertice = criarLista(numeroVertice); //Alocada dinamicamente
+	Lista* vertice = criarLista(numeroVertice); //Cria uma lista para representar o vertice e seus vizinhos
 
+	// Verifica se nao tem vertices inseridos
 	if(g->listaAdj == NULL)
 	{
 		g->listaAdj = vertice;
@@ -44,6 +49,8 @@ void insereVertice(Grafo* g)
 	else
 	{
 		Lista* aux = g->listaAdj;
+
+		// Itera ate o final para inserir a lista (vertice e seus vizinhos)
 		while(aux->proximaLista != NULL)
 		{
 			aux = aux->proximaLista;
@@ -58,6 +65,7 @@ void insereAresta(Grafo* g, int v, double d, int w)
 {
 	Lista* aux = g->listaAdj;
 
+	// Verifica se o vertice informado eh valido
 	if(v < 0 || v > g->tamanho)
 	{
 		printf("\nVertice invalido!\n");
@@ -90,11 +98,12 @@ int quantidadeArestas(Grafo* g)
 	Lista* aux = g->listaAdj;
         int quantidadeVertices = 0;
 
+	// Verifica se o grafo esta vazio
         if(g->tamanho == 0)
         {
                 printf("\nGrafo vazio!\n");
 
-                return -1;
+                return -1; // Retorna uma quantidade invalida para tratamento posteriormente
         }
         
         while(aux != NULL)
@@ -108,6 +117,7 @@ int quantidadeArestas(Grafo* g)
 
 int grauMinimo(Grafo* g)
 {
+	// Verifica se o grafo so tem um vertice
 	if(g->tamanho == 1)
 	{
 		return 0;
@@ -137,6 +147,7 @@ int grauMinimo(Grafo* g)
 
 int grauMaximo(Grafo* g)
 {
+	// Verifica se o grafo so tem um vertice
 	if(g->tamanho == 1)
         {
                 return 0;
@@ -166,12 +177,14 @@ int grauMaximo(Grafo* g)
 
 Lista* vizinhosVertice(Grafo* g, int v)
 {
+	// Verifica se o grafo eh nulo / nao existe
 	if (g == NULL) 
 	{
         	printf("O ponteiro do grafo é NULL\n");
         	return NULL;
     	}
 
+	// Verifica se o grafo esta vazio
     	if (g->listaAdj == NULL) 
 	{
         	printf("O ponteiro listaAdj do grafo é NULL\n");

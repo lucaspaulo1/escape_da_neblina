@@ -7,16 +7,18 @@
 
 Heap* criarHeap(int n)
 {
+	// Verifica se o parametro passado eh valido
 	if(n < 1)
 	{
 	       	printf("Tamanho inválido!");
 		
-		return 0;
+		return NULL;
 	}
 	
-	Heap* heap = (Heap*) malloc(sizeof(Heap));
-	Tupla* tuplas = (Tupla*) malloc(sizeof(Tupla) * (n));
+	Heap* heap = (Heap*) malloc(sizeof(Heap)); // Aloca dimanicamente o tamanho necessario para um 'Heap'
+	Tupla* tuplas = (Tupla*) malloc(sizeof(Tupla) * (n)); // Aloca dinamicamente um vetor de tuplas 
 
+	// Verifica se as alocacoes foram feitas corretamente
 	if(heap == NULL || tuplas == NULL)
 	{
 		printf("A alocacao para o Heap falhou!");
@@ -40,7 +42,7 @@ void setTupla(Tupla* tupla, double dist, int vert, int port, double hstc)
 
 int compararTuplas(Tupla a, Tupla b)
 {
-	if((a.h == 0) && (b.h == 0))
+	if((a.h == 0) && (b.h == 0)) // Define que 'h' tem maior precedencia sobre os demais atributos 
 	{
     		if (a.d > b.d) return 1;
     		if (a.d < b.d) return -1;
@@ -62,28 +64,29 @@ int compararTuplas(Tupla a, Tupla b)
 
 int getAncestral(int i)
 {
-	return (i - 1) / 2;
+	return (i - 1) / 2; // Na implementacao escolhida, o 'pai' do registro sempre  e obtido desta maneira
 }
 
 int getSucessorEsq(int i)
 {
-	return 2 * i + 1;
+	return 2 * i + 1; // Na implementacao escolhida, o 'filho' da esquerda sempre eh obtido desta maneira
 }
 
 int getSucessorDir(int i)
 {
-    	return 2 * i + 2;
+    	return 2 * i + 2; // Na implementacao escolhida, o 'filho' da direita sempre  e obtido desta maneira
 }
 
 void destruirHeap(Heap* heap)
 {
-	free(heap->vetor);
-	free(heap);
+	free(heap->vetor); // Desaloca o vetor de Tuplas
+	free(heap); // Desaloca o Heap
 }
 
 
 void inserirNoHeap(Heap* heap, double d, int v, int num_portais, double h)
 {
+	// Verifica se o Heap esta cheio
     	if (heap->ocupados == heap->tamanho) 
 	{
         	printf("O heap está cheio!");
@@ -97,6 +100,7 @@ void inserirNoHeap(Heap* heap, double d, int v, int num_portais, double h)
     	int i = heap->ocupados;
     	int pai = getAncestral(i);
 
+	// Procura a posicao correta para inserir o novo registro
     	while (i > 0 && compararTuplas(heap->vetor[i], heap->vetor[pai]) > 0) 
 	{
         	Tupla temp = heap->vetor[i];
@@ -110,60 +114,6 @@ void inserirNoHeap(Heap* heap, double d, int v, int num_portais, double h)
     	heap->ocupados++;
 }
 
-/*
-No* removeNoHeap(Heap* heap)
-{
-	int i_ultimo = (heap->ocupados) - 1;
-	int i, l, r, filho, aux_v = 0;
-	double aux_d = 0;
-	No* pares = heap->vetor;
-	No primeiro = pares[0];
-	No ultimo = pares[i_ultimo];
-	No* raiz;
-
-	if(heap->ocupados == 0) 
-	{
-		printf("O heap está vazio!");
-		exit(1);
-	}
-
-	// Pega a raiz
-	setarNo(raiz, primeiro.distancia, primeiro.vertice);
-	
-	//Troca raiz pelo ultimo elemento do Heap
-	setarNo(&primeiro, ultimo.distancia, ultimo.vertice);
-
-	// Decrementa a quantidade de elementos do Heap
-	heap->ocupados--;
-	
-	// Define os indices
-	i = 0;
-	l = GetSucessorEsq(i);
-	r = GetSucessorDir(i);
-
-	// 's' recebe o maior sucessor de 'i'
-	filho = l;
-	if(l < r) filho = r;
-
-	// Faz o Heapify caso necessario
-	while(compararNos(pares[filho], pares[i]) > 0)
-	{
-		// Troca filho pelo pai
-		aux_d = getDistancia(pares[filho]);
- 	       	aux_v = getVertice(pares[filho]);
-                setarNo(&pares[filho], getDistancia(&pares[i]), getVertice(&pares[i]));
-                setarNo(&pares[i], aux_d, aux_v);
-
-
-		// Define os indices
-		i = filho;
-		filho = l;
-		if(l < r) filho = r;
-	}
-
-	return raiz;
-}
-*/
 
 Tupla removeNoHeap(Heap* heap) 
 {
@@ -173,12 +123,15 @@ Tupla removeNoHeap(Heap* heap)
         	exit(1);
     	}
 
+	// Pega a raiz (maior elemento) e a substitui pelo ultimo elemento do vetor 
     	Tupla raiz = heap->vetor[0];
     	Tupla ultimo = heap->vetor[heap->ocupados - 1];
     	heap->vetor[0] = ultimo;
     	heap->ocupados--;
 
     	int i = 0;
+
+	// Faz o Heapfy
     	while (1) 
 	{
         	int l = getSucessorEsq(i);
@@ -224,5 +177,6 @@ void imprimirHeap(Heap* heap)
 
 int empty(Heap* heap)
 {
+	// Retorna '1' se a lista estiver vazia e '0' caso contrario
 	return (heap->ocupados == 0);
 }
