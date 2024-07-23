@@ -15,7 +15,7 @@ void setarInfinito(double* vetor, int n)
 	}
 }
 
-double* dijkstra(Grafo* g, double energia, int num_portais, int fonte)
+double dijkstra(Grafo* g, double energia, int num_portais, int fonte)
 {
 	int n = quantidadeVertices(g); // Quantidade de vertices do grafo
     	Heap* heap = criarHeap(n); // Quantidade de vertices do grafo
@@ -23,6 +23,7 @@ double* dijkstra(Grafo* g, double energia, int num_portais, int fonte)
     	double* dist = (double*) malloc(n * sizeof(double)); // Vetor de distancias do vertice inicial a todo outro vertice do grafo
 	int portais = 0; // Quantidade de portais usada
 	double aux;
+	int objetivo = n - 1;
 
 	// Verifica a alocacao de memoria
 	if(dist == NULL)
@@ -45,7 +46,8 @@ double* dijkstra(Grafo* g, double energia, int num_portais, int fonte)
         	int u = vertice.v;
 		int p = vertice.portais; // Representa o numero de portais do associado ao vertice no contexto do caminho
 
-        	if (dist[u] < w) continue; // Verifica se o vertice ja foi visitado
+		if (u == objetivo) return w;
+        	if (dist[u] <= w) continue; // Verifica se o vertice ja foi visitado
 
         	Lista* listaVizinhos = vizinhosVertice(g, u);
         	No* vizinho = listaVizinhos->primeiro;
@@ -83,10 +85,10 @@ double* dijkstra(Grafo* g, double energia, int num_portais, int fonte)
 
 	destruirHeap(heap); // Desaloca a memoria usada no heap
 
-    	return dist;
+    	return INFINITO;
 }
 
-double* aEstrela(Grafo* grafo, double* heuristica, double energia, int num_portais, int fonte, int objetivo)
+double aEstrela(Grafo* grafo, double* heuristica, double energia, int num_portais, int fonte, int objetivo)
 {
 	int n = quantidadeVertices(grafo); // Quantidade de vertices do grafo
 	Heap* fila = criarHeap(n); // Cria um Heap com 'n' espacos disponiveis
@@ -123,10 +125,10 @@ double* aEstrela(Grafo* grafo, double* heuristica, double energia, int num_porta
 		int p = vertice.portais; 
 
 		// Verifica se a saida e a entrada sao iguais
-		if(u == objetivo) break;
+		if(u == objetivo) return w;
 
 		// Verifica se o 
-		if(caminho_fechado[u] < w) continue;
+		if(caminho_fechado[u] <= w) continue;
 
 		// Pega os vizinhos do vertice
 		Lista* listaVizinhos = vizinhosVertice(grafo, u);
@@ -169,10 +171,10 @@ double* aEstrela(Grafo* grafo, double* heuristica, double energia, int num_porta
 
 	destruirHeap(fila); // Desalaoca a memoria usada no Heap
 
-	return caminho_fechado;
+	return INFINITO;
 }
 
-double* dijkstraMatriz(GrafoMatriz* g, double energia, int num_portais, int fonte) 
+double dijkstraMatriz(GrafoMatriz* g, double energia, int num_portais, int fonte) 
 {
     	int n = g->n; // Quantidade de vertices do grafo
     	Heap* heap = criarHeap(n); // Cria o heap
@@ -180,6 +182,7 @@ double* dijkstraMatriz(GrafoMatriz* g, double energia, int num_portais, int font
     	double* dist = (double*) malloc(n * sizeof(double)); // Vetor de distancias do vertice inicial a todo outro vertice do grafo
     	int portais = 0; // Quantidade de portais usada
     	double aux;
+	int objetivo = n - 1;
 
     	// Verifica a alocacao de memoria
     	if (dist == NULL) 
@@ -202,7 +205,8 @@ double* dijkstraMatriz(GrafoMatriz* g, double energia, int num_portais, int font
         	int u = vertice.v;
         	int p = vertice.portais; // Representa o numero de portais do associado ao vertice no contexto do caminho
 
-        	if (dist[u] < w) continue; // Verifica se o vertice ja foi visitado
+		if (u == objetivo) return w;
+        	if (dist[u] <= w) continue; // Verifica se o vertice ja foi visitado
 
         	// Itera sobre os vizinhos usando a matriz de adjacência
         	for (int v = 0; v < n; v++) 
@@ -235,10 +239,10 @@ double* dijkstraMatriz(GrafoMatriz* g, double energia, int num_portais, int font
 
     	destruirHeap(heap); // Desaloca a memoria usada no heap
 
-    	return dist;
+    	return INFINITO;
 }
 
-double* aEstrelaMatriz(GrafoMatriz* grafo, double* heuristica, double energia, int num_portais, int fonte, int objetivo) {
+double aEstrelaMatriz(GrafoMatriz* grafo, double* heuristica, double energia, int num_portais, int fonte, int objetivo) {
     	int n = grafo->n; // Quantidade de vertices do grafo
     	Heap* fila = criarHeap(n); // Cria um Heap com 'n' espacos disponiveis
     	Tupla vertice; // Tupla representando os caminhos e vertices (clareiras)
@@ -273,10 +277,10 @@ double* aEstrelaMatriz(GrafoMatriz* grafo, double* heuristica, double energia, i
         	int p = vertice.portais;
 
         	// Verifica se a saida e a entrada sao iguais
-        	if (u == objetivo) break;
+        	if (u == objetivo) return w;
 
         	// Verifica se o
-        	if (caminho_fechado[u] < w) continue;
+        	if (caminho_fechado[u] <= w) continue;
 
         	// Itera sobre os vizinhos usando a matriz de adjacência
         	for (int v = 0; v < n; v++) {
@@ -313,7 +317,7 @@ double* aEstrelaMatriz(GrafoMatriz* grafo, double* heuristica, double energia, i
 
     	destruirHeap(fila); // Desaloca a memoria usada no Heap
 
-    	return caminho_fechado;
+    	return INFINITO;
 }
 
 int ehPossivel(double distancia, double energia)
@@ -323,14 +327,21 @@ int ehPossivel(double distancia, double energia)
 	return 1;
 }
 
+int ehPossivelMatriz(double distancia, double energia) 
+{
+         if(distancia > energia) return 0;
+
+         return 1;
+}
+
 void encontraCaminho(Grafo* g, int n, double energia, int num_portais, double* heuristica)
 {
 	int entrada = 0;
 	int saida = n - 1;
-	double* menor_caminho_dijkstra = dijkstra(g, energia, num_portais, entrada);
-	double* menor_caminho_a_estrela = aEstrela(g, heuristica, energia, num_portais, entrada, saida);
-	double resposta_dijkstra = menor_caminho_dijkstra[saida];
-	double resposta_a_estrela = menor_caminho_a_estrela[saida];
+	double menor_caminho_dijkstra = dijkstra(g, energia, num_portais, entrada);
+	double menor_caminho_a_estrela = aEstrela(g, heuristica, energia, num_portais, entrada, saida);
+	double resposta_dijkstra = menor_caminho_dijkstra;
+	double resposta_a_estrela = menor_caminho_a_estrela;
 
 	// Printa '1' caso Linque consiga escapar usando o Dijkstra e '0' caso contrario
 	if(resposta_dijkstra <= energia) printf("1 ");
@@ -340,9 +351,6 @@ void encontraCaminho(Grafo* g, int n, double energia, int num_portais, double* h
 	if(resposta_a_estrela <= energia) printf("1\n");
 	else printf("0\n");
 
-	// Desaloca os vetores
-	free(menor_caminho_dijkstra);
-	free(menor_caminho_a_estrela);
 }
 
 

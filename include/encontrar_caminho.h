@@ -15,7 +15,7 @@ void setarInfinito(double* vetor, int n);
  * @param 'num_portais' representa o número máximo de portais que Linque pode usar.
  * @param 'fonte' representa a clareira inicial (sempre o vertice de indice 0).
 */
-double* dijkstra(Grafo* g, double energia, int num_portais, int fonte);
+double dijkstra(Grafo* g, double energia, int num_portais, int fonte);
 
 
 /**
@@ -28,17 +28,27 @@ double* dijkstra(Grafo* g, double energia, int num_portais, int fonte);
  * @param 'fonte' A clareira inicial (sempre 0).
  * @param 'objetivo' A clareira de saída (sempre n - 1).
  */
-double* aEstrela(Grafo* g, double* heuristica, double energia, int num_portais, int fonte, int objetivo);
+double aEstrela(Grafo* g, double* heuristica, double energia, int num_portais, int fonte, int objetivo);
 
 /*
  * Algoritmo do Dijkstra mas agora usando a implementacao do Grafo como matriz de adjacencia
  */
-double* dijkstraMatriz(GrafoMatriz* g, double energia, int num_portais, int fonte);
+double dijkstraMatriz(GrafoMatriz* g, double energia, int num_portais, int fonte);
 
 /*
  * asd
  */
-double* aEstrelaMatriz(GrafoMatriz* g, double* heuristica, double energia, int num_portais, int fonte, int objetivo);
+double aEstrelaMatriz(GrafoMatriz* g, double* heuristica, double energia, int num_portais, int fonte, int objetivo);
+
+/*
+ * Verifica se a distancia encontrada em um dos algoritmos (versao lista adjacencia) eh menor que a energia
+ */
+int ehPossivel(double distancia, double energia);
+
+/*
+ * Verifica se a distancia encontrada em um dos algoritmos (versao matriz adjacencia) eh menor que a energia
+ */
+int ehPossivelMatriz(double distancia, double energia);
 
 /*
  * Usa os dois algoritmos: Dijkstra e A* para verificar se Linque consegue escapar da floresta

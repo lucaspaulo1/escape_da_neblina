@@ -34,3 +34,8 @@ run: $(EXE)
 valgrind: $(EXE)
 	valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(EXE) < inputs.txt
 
+# teste
+gen: 
+	@c++ -g ./src/no.c ./src/lista_encadeada.c ./src/graph.c ./src/grafo_matriz_adjacencia.c ./src/fila_prioridade.c ./src/encontrar_caminho.c eique.c -o asdas
+	@./asdas
+	
