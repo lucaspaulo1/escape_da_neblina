@@ -5,7 +5,6 @@
 #include "../include/grafo_matriz_adjacencia.h"
 #include "../include/fila_prioridade.h"
 #include "../include/encontrar_caminho.h"
-#include "../include/testes.h"
 
 #include "math.h"
 #include "stdio.h"
@@ -37,9 +36,7 @@ int main()
 	double* distancias; // Vetor de distancias euclidianas de cada clareira para a saida
 
 	Grafo* grafo = novoGrafo();
-	//testeSorvete();
 
-	testeMatriz();
     	scanf("%d %d %d", &n, &m, &k); 
 
 	pontos = (Ponto*) malloc(sizeof(Ponto) * (n + 1));	
@@ -96,7 +93,6 @@ int main()
 	// Verifica se Linque conseguira escapar da floresta
 	encontraCaminho(grafo, n, s, q, distancias);
 
-	imprimeGrafo(grafo);
 	deletaGrafo(grafo);	
 
 	free(distancias);

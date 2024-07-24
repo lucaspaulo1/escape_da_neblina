@@ -180,16 +180,12 @@ void testeDijkstra()
 	
 	imprimeGrafo(g);
 
-	double* dist = dijkstra(g, energia, portais, 0);
+	double dist = dijkstra(g, energia, portais, 0);
 
 	puts("");
-	for(int i = 0; i < n; i++)
-	{
-		printf("%lf ", dist[i]);
-	}
 	puts("");
 
-	printf("distancia ate a saida: %lf\n\n", dist[saida]);
+	printf("distancia ate a saida: %lf\n\n", dist);
 
 
 	Grafo* g2 = novoGrafo();
@@ -211,8 +207,8 @@ void testeDijkstra()
 
 	imprimeGrafo(g2);
 
-	double* dist2 = dijkstra(g2, energia, portais, 0);
-	printf("distancia ate a saida: %lf\n\n", dist2[saida]);
+	double dist2 = dijkstra(g2, energia, portais, 0);
+	printf("distancia ate a saida: %lf\n\n", dist2);
 
 	Grafo* g3 = novoGrafo();
 	n = 4;
@@ -228,8 +224,8 @@ void testeDijkstra()
 	insereAresta(g3, 2, 4, 3);
 
 	imprimeGrafo(g3);
-	double* dist3 = dijkstra(g3, energia, portais, 0);
-       	printf("distancia ate a saida: %lf\n\n", dist3[saida]);	
+	double dist3 = dijkstra(g3, energia, portais, 0);
+       	printf("distancia ate a saida: %lf\n\n", dist3);	
 
 }
 

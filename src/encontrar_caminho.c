@@ -46,8 +46,14 @@ double dijkstra(Grafo* g, double energia, int num_portais, int fonte)
         	int u = vertice.v;
 		int p = vertice.portais; // Representa o numero de portais do associado ao vertice no contexto do caminho
 
-		if (u == objetivo) return w;
-        	if (dist[u] <= w) continue; // Verifica se o vertice ja foi visitado
+		if (u == objetivo) 
+		{
+			destruirHeap(heap);
+			free(dist);
+			return w;
+		}
+
+        	if (dist[u] < w) continue; // Verifica se o vertice ja foi visitado
 
         	Lista* listaVizinhos = vizinhosVertice(g, u);
         	No* vizinho = listaVizinhos->primeiro;
@@ -84,6 +90,7 @@ double dijkstra(Grafo* g, double energia, int num_portais, int fonte)
     	}
 
 	destruirHeap(heap); // Desaloca a memoria usada no heap
+	free(dist);
 
     	return INFINITO;
 }
@@ -125,10 +132,16 @@ double aEstrela(Grafo* grafo, double* heuristica, double energia, int num_portai
 		int p = vertice.portais; 
 
 		// Verifica se a saida e a entrada sao iguais
-		if(u == objetivo) return w;
+		if(u == objetivo) 
+		{
+			free(caminho_fechado);
+			destruirHeap(fila);
+
+			return w;
+		}
 
 		// Verifica se o 
-		if(caminho_fechado[u] <= w) continue;
+		if(caminho_fechado[u] < w) continue;
 
 		// Pega os vizinhos do vertice
 		Lista* listaVizinhos = vizinhosVertice(grafo, u);
@@ -170,6 +183,7 @@ double aEstrela(Grafo* grafo, double* heuristica, double energia, int num_portai
 	}
 
 	destruirHeap(fila); // Desalaoca a memoria usada no Heap
+	free(caminho_fechado);
 
 	return INFINITO;
 }
@@ -205,8 +219,15 @@ double dijkstraMatriz(GrafoMatriz* g, double energia, int num_portais, int fonte
         	int u = vertice.v;
         	int p = vertice.portais; // Representa o numero de portais do associado ao vertice no contexto do caminho
 
-		if (u == objetivo) return w;
-        	if (dist[u] <= w) continue; // Verifica se o vertice ja foi visitado
+		if (u == objetivo) 
+		{
+			free(dist);
+			destruirHeap(heap);
+
+			return w;
+		}
+
+        	if (dist[u] < w) continue; // Verifica se o vertice ja foi visitado
 
         	// Itera sobre os vizinhos usando a matriz de adjacência
         	for (int v = 0; v < n; v++) 
@@ -238,8 +259,9 @@ double dijkstraMatriz(GrafoMatriz* g, double energia, int num_portais, int fonte
     	}
 
     	destruirHeap(heap); // Desaloca a memoria usada no heap
-
-    	return INFINITO;
+	free(dist);
+    	
+	return INFINITO;
 }
 
 double aEstrelaMatriz(GrafoMatriz* grafo, double* heuristica, double energia, int num_portais, int fonte, int objetivo) {
@@ -277,10 +299,16 @@ double aEstrelaMatriz(GrafoMatriz* grafo, double* heuristica, double energia, in
         	int p = vertice.portais;
 
         	// Verifica se a saida e a entrada sao iguais
-        	if (u == objetivo) return w;
+        	if (u == objetivo)
+		{
+			free(caminho_fechado);
+			destruirHeap(fila);
+
+			return w;
+		}
 
         	// Verifica se o
-        	if (caminho_fechado[u] <= w) continue;
+        	if (caminho_fechado[u] < w) continue;
 
         	// Itera sobre os vizinhos usando a matriz de adjacência
         	for (int v = 0; v < n; v++) {
@@ -316,6 +344,7 @@ double aEstrelaMatriz(GrafoMatriz* grafo, double* heuristica, double energia, in
     	}
 
     	destruirHeap(fila); // Desaloca a memoria usada no Heap
+	free(caminho_fechado);
 
     	return INFINITO;
 }
